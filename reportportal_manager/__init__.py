@@ -1,0 +1,1 @@
+from reportportal_manager.rp_manager import ReportPortalManager
