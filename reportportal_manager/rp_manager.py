@@ -47,7 +47,8 @@ class ReportPortalManager:
         return val
 
     def __init__(self, battery: str, product: str,
-                 version: str, browser: str, so):
+                 version: str, browser: str, so: str,
+                 endpoint: str, token: str, project: str):
         """
         Cria o gerenciador do processo de relatorios.
         :param battery:
@@ -60,7 +61,16 @@ class ReportPortalManager:
             str: Browser a ser testadp
         :param so:
             str: Sistema operacional
+        :param endpoint:
+            str: ReportPortal endpoint
+        :param token:
+            str: Auth token
+        :param project:
+            str: Nome do projeto
         """
+        self.endpoint = endpoint
+        self.project = project
+        self.token = token
 
         self.launch_name = self.launch_name.format(
             battery=battery,
@@ -93,7 +103,7 @@ class ReportPortalManager:
         BEFORE_CLASS, BEFORE_GROUPS, BEFORE_METHOD, BEFORE_SUITE, BEFORE_TEST,
         AFTER_CLASS, AFTER_GROUPS, AFTER_METHOD, AFTER_SUITE, AFTER_TEST)
         :param feature:
-            Objeto feature utilizada no teste.
+            Objeto da feature utilizada no teste.
         """
         self.service.start_test_item(name=feature.name,
                                      description=f'{feature.description}',
@@ -122,7 +132,7 @@ class ReportPortalManager:
         :param step:
             Objeto step utilizado no teste.
         :param attachment:
-            dict/text: anexo a ser enviado ao servidor.
+            dict/str: anexo a ser enviado ao servidor.
         """
         self.service.log(time=self.timestamp(),
                          message=f"{step.name}[:{step.line}] - Has started...",
@@ -136,6 +146,8 @@ class ReportPortalManager:
         Atualmente gera um anexo com o arquivo gas.dbd e envia ao servidor.
         :param step:
             Objeto step utilizado no teste.
+        :param attachment:
+            dict/str: anexo a ser enviado ao servidor.
         """
         if step.status == 'failed':
             message = (
@@ -164,8 +176,8 @@ class ReportPortalManager:
     def finish_feature(self, feature: Feature):
         """
         Finaliza a feature de testes atual.
-        :param scenario:
-            Objeto scenario utilizado no teste
+        :param feature:
+            Objeto da feature utilizada no teste.
         """
         self.service.finish_test_item(end_time=self.timestamp(),
                                       status=feature.status.name)
