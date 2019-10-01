@@ -161,7 +161,7 @@ class ReportPortalManager:
             message = f"{step.name}[:{step.line}] - Has finished..."
             level = "INFO"
 
-        message =+ message_extras if message_extras else ''
+        message += message_extras if message_extras else ''
         self.service.log(time=self.timestamp(),
                          message=message,
                          level=level,
