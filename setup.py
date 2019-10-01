@@ -3,7 +3,7 @@ from distutils.core import setup
 setup(
     name='reportportal_manager',
     packages=['reportportal_manager'],  # Chose the same as "name"
-    version='0.1',
+    version='0.1.1',
     license='MIT',
     description='A simple abstraction for report portal library, for behave tests.',
     # Give a short description about your library

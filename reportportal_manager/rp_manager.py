@@ -139,13 +139,15 @@ class ReportPortalManager:
                          attachment=attachment,
                          level="INFO")
 
-    def finish_step(self, step: Step, attachment=None):
+    def finish_step(self, step: Step, message_extras=None, attachment=None):
         """
         Cria um log de finalização de step. Acusando erro ou sucesso, de acordo
         com seu status.
         Atualmente gera um anexo com o arquivo gas.dbd e envia ao servidor.
         :param step:
             Objeto step utilizado no teste.
+        :param message_extras:
+            str: adicionar texto extra na corpo da mensagem.
         :param attachment:
             dict/str: anexo a ser enviado ao servidor.
         """
@@ -160,7 +162,7 @@ class ReportPortalManager:
             level = "INFO"
 
         self.service.log(time=self.timestamp(),
-                         message=message,
+                         message=message + message_extras,
                          level=level,
                          attachment=attachment)
 
