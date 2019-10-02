@@ -12,8 +12,7 @@ class ReportPortalManager:
     project: str
     token: str
     launch_name = "[{battery}] {product} {so} "
-    launch_doc = "{product} V:{version}{build_version} {browser} " \
-                 "<a href={build_url}>link</a>"
+    launch_doc = "{product} V:{version}{build_version} {browser} {build_url}"
 
     @staticmethod
     def timestamp():
