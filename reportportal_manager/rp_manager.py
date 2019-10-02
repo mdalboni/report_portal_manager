@@ -12,7 +12,8 @@ class ReportPortalManager:
     project: str
     token: str
     launch_name = "[{battery}] {product} {so} "
-    launch_doc = "{product} v{version} {browser}"
+    launch_doc = "{product} V:{version}{build_version} {browser} " \
+                 "<a href={build_url}>link</a>"
 
     @staticmethod
     def timestamp():
@@ -46,21 +47,14 @@ class ReportPortalManager:
             val += tb
         return val
 
-    def __init__(self, battery: str, product: str,
-                 version: str, browser: str, so: str,
-                 endpoint: str, token: str, project: str):
+    def __init__(self, launch_name: str, launch_doc: str, endpoint: str,
+                 token: str, project: str):
         """
         Cria o gerenciador do processo de relatorios.
-        :param battery:
-            str: Nome da Bateria de Testes
-        :param product:
-            str: Nome do Produto a ser testado
-        :param version:
-            str: Versão do produto
-        :param browser:
-            str: Browser a ser testadp
-        :param so:
-            str: Sistema operacional
+        :param launch_name:
+            str: Nome do Launch
+        :param launch_doc:
+            str: Documentação do Launch
         :param endpoint:
             str: ReportPortal endpoint
         :param token:
@@ -68,19 +62,12 @@ class ReportPortalManager:
         :param project:
             str: Nome do projeto
         """
+        self.launch_name = launch_name
+        self.launch_doc = launch_doc
         self.endpoint = endpoint
         self.project = project
         self.token = token
 
-        self.launch_name = self.launch_name.format(
-            battery=battery,
-            product=product,
-            so=so)
-        self.launch_doc = self.launch_doc.format(
-            product=product,
-            version=version,
-            browser=browser
-        )
         self.service = ReportPortalServiceAsync(
             endpoint=self.endpoint,
             project=self.project,
