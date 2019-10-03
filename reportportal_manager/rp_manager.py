@@ -1,4 +1,6 @@
 import traceback
+from mimetypes import guess_type
+from os.path import basename
 from time import time
 
 from behave.model import Feature, Scenario, Step
@@ -15,7 +17,7 @@ class ReportPortalManager:
     launch_doc = "{product} V:{version}{build_version} {browser} {build_url}"
 
     @staticmethod
-    def timestamp():
+    def timestamp() -> str:
         """
         :return:
             str: timestamp convertido em str para uso nos relatorios
@@ -33,7 +35,7 @@ class ReportPortalManager:
         traceback.print_exception(*exc_info)
 
     @staticmethod
-    def format_traceback(step_traceback):
+    def format_traceback(step_traceback) -> str:
         """
         Concatena os erros do step para enviar ao Report Portal.
         :param step_traceback:
@@ -45,6 +47,26 @@ class ReportPortalManager:
         for tb in traceback.format_tb(step_traceback):
             val += tb
         return val
+
+    @staticmethod
+    def create_attachment(path: str, name: str = None) -> dict:
+        """
+        Retorna um objeto de anexo pronto para ser enviado ao report portal.
+        :param name:
+            str: Nome do arquivo
+        :param path:
+            str: Caminho local ate o arquivo
+        :return:
+            dict: Objeto pronto para ser enviado ao seridor.
+        """
+
+        with open(path, 'rb') as file:
+            attachment = {
+                "name": basename(file) if not name else name,
+                "data": file.read(),
+                "mime": guess_type(file)[0] or "application/octet-stream"
+            }
+        return attachment
 
     def __init__(self, launch_name: str, launch_doc: str, endpoint: str,
                  token: str, project: str):
