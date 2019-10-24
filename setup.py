@@ -3,7 +3,7 @@ from distutils.core import setup
 setup(
     name='reportportal_manager',
     packages=['reportportal_manager'],
-    version='0.2',
+    version='1.0',
     license='MIT',
     description='A simple abstraction for report portal library, for behave tests.',
     author='Maxwell Martins Dalboni',
