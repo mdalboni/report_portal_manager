@@ -64,7 +64,7 @@ class ReportPortalManager:
             attachment = {
                 "name": basename(path) if not name else name,
                 "data": file.read(),
-                "mime": guess_type(file)[0] or "application/octet-stream"
+                "mime": guess_type(path)[0] or "application/octet-stream"
             }
         return attachment
 
@@ -159,7 +159,7 @@ class ReportPortalManager:
         :param attachment:
             dict/str: anexo a ser enviado ao servidor.
         """
-        status = step.status if type(step.status) else step.status.name
+        status = step.status if type(step.status) == str else step.status.name
         if status == 'failed':
             message = (
                     f'{step.name}[:{step.line}] - Has failed...\n' +
@@ -193,8 +193,9 @@ class ReportPortalManager:
         :param feature:
             Objeto da feature utilizada no teste.
         """
+        status = feature.status if type(feature.status) == str else feature.status.name
         self.service.finish_test_item(end_time=self.timestamp(),
-                                      status=feature.status.name)
+                                      status=status)
 
     def finish_service(self):
         """
