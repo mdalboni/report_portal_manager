@@ -64,7 +64,7 @@ class ReportPortalManager:
             attachment = {
                 "name": basename(path) if not name else name,
                 "data": file.read(),
-                "mime": guess_type(file)[0] or "application/octet-stream"
+                "mime": guess_type(path)[0] or "application/octet-stream"
             }
         return attachment
 
