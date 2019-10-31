@@ -88,21 +88,26 @@ class ReportPortalManager:
         self.endpoint = endpoint
         self.project = project
         self.token = token
-
-        self.service = ReportPortalServiceAsync(
-            endpoint=self.endpoint,
-            project=self.project,
-            token=self.token,
-            error_handler=self.error_handler
-        )
+        try:
+            self.service = ReportPortalServiceAsync(
+                endpoint=self.endpoint,
+                project=self.project,
+                token=self.token,
+                error_handler=self.error_handler
+            )
+        except:
+            print('Report Portal is having issues, please check your server.')
 
     def start_service(self):
         """
         Inicializa um novo serviço para a bateria de testes no Report Portal.
         """
-        self.service.start_launch(name=self.launch_name,
-                                  start_time=self.timestamp(),
-                                  description=self.launch_doc)
+        try:
+            self.service.start_launch(name=self.launch_name,
+                                      start_time=self.timestamp(),
+                                      description=self.launch_doc)
+        except:
+            print('Report Portal is having issues, please check your server.')
 
     def start_feature(self, feature: Feature):
         """
@@ -113,11 +118,14 @@ class ReportPortalManager:
         :param feature:
             Objeto da feature utilizada no teste.
         """
-        self.service.start_test_item(name=feature.name,
-                                     description=f'{feature.description}',
-                                     tags=feature.tags,
-                                     start_time=self.timestamp(),
-                                     item_type="STORY")
+        try:
+            self.service.start_test_item(name=feature.name,
+                                         description=f'{feature.description}',
+                                         tags=feature.tags,
+                                         start_time=self.timestamp(),
+                                         item_type="STORY")
+        except:
+            print('Report Portal is having issues, please check your server.')
 
     def start_scenario(self, scenario: Scenario):
         """
@@ -128,11 +136,14 @@ class ReportPortalManager:
         :param scenario:
             Objeto scenario utilizado no teste
         """
-        self.service.start_test_item(name=scenario.name,
-                                     description=f'{scenario.description}',
-                                     tags=scenario.tags,
-                                     start_time=self.timestamp(),
-                                     item_type="SCENARIO")
+        try:
+            self.service.start_test_item(name=scenario.name,
+                                         description=f'{scenario.description}',
+                                         tags=scenario.tags,
+                                         start_time=self.timestamp(),
+                                         item_type="SCENARIO")
+        except:
+            print('Report Portal is having issues, please check your server.')
 
     def start_step(self, step: Step, attachment=None):
         """
@@ -142,10 +153,13 @@ class ReportPortalManager:
         :param attachment:
             dict/str: anexo a ser enviado ao servidor.
         """
-        self.service.log(time=self.timestamp(),
-                         message=f"{step.name}[:{step.line}] - Has started...",
-                         attachment=attachment,
-                         level="INFO")
+        try:
+            self.service.log(time=self.timestamp(),
+                             message=f"{step.name}[:{step.line}] - Has started...",
+                             attachment=attachment,
+                             level="INFO")
+        except:
+            print('Report Portal is having issues, please check your server.')
 
     def finish_step(self, step: Step, message_extras=None, attachment=None):
         """
@@ -159,22 +173,26 @@ class ReportPortalManager:
         :param attachment:
             dict/str: anexo a ser enviado ao servidor.
         """
-        status = step.status if type(step.status) == str else step.status.name
-        if status == 'failed':
-            message = (
-                    f'{step.name}[:{step.line}] - Has failed...\n' +
-                    self.format_traceback(step.exc_traceback)
-            )
-            level = 'ERROR'
-        else:
-            message = f"{step.name}[:{step.line}] - Has finished..."
-            level = "INFO"
+        try:
+            status = step.status if type(
+                step.status) == str else step.status.name
+            if status == 'failed':
+                message = (
+                        f'{step.name}[:{step.line}] - Has failed...\n' +
+                        self.format_traceback(step.exc_traceback)
+                )
+                level = 'ERROR'
+            else:
+                message = f"{step.name}[:{step.line}] - Has finished..."
+                level = "INFO"
 
-        message += message_extras if message_extras else ''
-        self.service.log(time=self.timestamp(),
-                         message=message,
-                         level=level,
-                         attachment=attachment)
+            message += message_extras if message_extras else ''
+            self.service.log(time=self.timestamp(),
+                             message=message,
+                             level=level,
+                             attachment=attachment)
+        except:
+            print('Report Portal is having issues, please check your server.')
 
     def finish_scenario(self, scenario: Scenario):
         """
@@ -182,10 +200,13 @@ class ReportPortalManager:
         :param scenario:
             Objeto scenario utilizado no teste
         """
-        status = scenario.status if type(
-            scenario.status) == str else scenario.status.name
-        self.service.finish_test_item(end_time=self.timestamp(),
-                                      status=status)
+        try:
+            status = scenario.status if type(
+                scenario.status) == str else scenario.status.name
+            self.service.finish_test_item(end_time=self.timestamp(),
+                                          status=status)
+        except:
+            print('Report Portal is having issues, please check your server.')
 
     def finish_feature(self, feature: Feature):
         """
@@ -193,14 +214,21 @@ class ReportPortalManager:
         :param feature:
             Objeto da feature utilizada no teste.
         """
-        status = feature.status if type(feature.status) == str else feature.status.name
-        self.service.finish_test_item(end_time=self.timestamp(),
-                                      status=status)
+        try:
+            status = feature.status if type(
+                feature.status) == str else feature.status.name
+            self.service.finish_test_item(end_time=self.timestamp(),
+                                          status=status)
+        except:
+            print('Report Portal is having issues, please check your server.')
 
     def finish_service(self):
         """
         Finaliza o serviço, fecha a conexão com o servidor e conclui a
         bateria de testes.
         """
-        self.service.finish_launch(end_time=self.timestamp())
-        self.service.terminate()
+        try:
+            self.service.finish_launch(end_time=self.timestamp())
+            self.service.terminate()
+        except:
+            print('Report Portal is having issues, please check your server.')
