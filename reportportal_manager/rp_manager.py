@@ -166,7 +166,7 @@ class ReportPortalManager:
         """
         Cria um log de finalização de step. Acusando erro ou sucesso, de acordo
         com seu status.
-        Atualmente gera um anexo com o arquivo gas.dbd e envia ao servidor.
+        Atualmente gera um anexo com o um arquivo e envia ao servidor.
         :param step:
             Objeto step utilizado no teste.
         :param message_extras:
