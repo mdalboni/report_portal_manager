@@ -10,6 +10,7 @@ from reportportal_client import ReportPortalServiceAsync
 class ReportPortalManager:
     service: ReportPortalServiceAsync
 
+    valid_batteries = ['smoke', 'full', 'develop']
     endpoint: str
     project: str
     token: str
@@ -107,7 +108,7 @@ class ReportPortalManager:
                                       start_time=self.timestamp(),
                                       description=self.launch_doc)
         except:
-            print('Report Portal is having issues, please check your server.')
+            pass
 
     def start_feature(self, feature: Feature):
         """
@@ -125,7 +126,7 @@ class ReportPortalManager:
                                          start_time=self.timestamp(),
                                          item_type="STORY")
         except:
-            print('Report Portal is having issues, please check your server.')
+            pass
 
     def start_scenario(self, scenario: Scenario):
         """
@@ -159,7 +160,7 @@ class ReportPortalManager:
                              attachment=attachment,
                              level="INFO")
         except:
-            print('Report Portal is having issues, please check your server.')
+            pass
 
     def finish_step(self, step: Step, message_extras=None, attachment=None):
         """
@@ -187,12 +188,21 @@ class ReportPortalManager:
                 level = "INFO"
 
             message += message_extras if message_extras else ''
-            self.service.log(time=self.timestamp(),
-                             message=message,
-                             level=level,
-                             attachment=attachment)
+
+            allow_attachment = False
+            for battery in self.valid_batteries:
+                if battery in self.launch_name:
+                    allow_attachment = True
+                    break
+
+            self.service.log(
+                time=self.timestamp(),
+                message=message,
+                level=level,
+                attachment=attachment if allow_attachment else None
+            )
         except:
-            print('Report Portal is having issues, please check your server.')
+            pass
 
     def finish_scenario(self, scenario: Scenario):
         """
@@ -206,7 +216,7 @@ class ReportPortalManager:
             self.service.finish_test_item(end_time=self.timestamp(),
                                           status=status)
         except:
-            print('Report Portal is having issues, please check your server.')
+            pass
 
     def finish_feature(self, feature: Feature):
         """
@@ -220,7 +230,7 @@ class ReportPortalManager:
             self.service.finish_test_item(end_time=self.timestamp(),
                                           status=status)
         except:
-            print('Report Portal is having issues, please check your server.')
+            pass
 
     def finish_service(self):
         """
@@ -231,4 +241,4 @@ class ReportPortalManager:
             self.service.finish_launch(end_time=self.timestamp())
             self.service.terminate()
         except:
-            print('Report Portal is having issues, please check your server.')
+            pass
