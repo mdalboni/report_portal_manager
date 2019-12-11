@@ -195,6 +195,10 @@ class ReportPortalManager:
                     allow_attachment = True
                     break
 
+            # Desabilitando temporariamente o uso dos txts para testes de stress.
+            if attachment and '.txt' in attachment.name:
+                allow_attachment = False
+
             self.service.log(
                 time=self.timestamp(),
                 message=message,
