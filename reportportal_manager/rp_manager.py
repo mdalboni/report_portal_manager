@@ -23,6 +23,7 @@ class ReportPortalManager:
         :return:
             str: timestamp convertido em str para uso nos relatorios
         """
+        return
         return str(int(time() * 1000))
 
     @staticmethod
@@ -32,6 +33,7 @@ class ReportPortalManager:
         :param exc_info:
             Exception responsavel pelo tratamento do erro.
         """
+        return
         print("Error occurred: {}".format(exc_info[1]))
         traceback.print_exception(*exc_info)
 
@@ -44,6 +46,7 @@ class ReportPortalManager:
         :return:
             str: Traceback convertida em string.
         """
+        return
         val = ''
         for tb in traceback.format_tb(step_traceback):
             val += tb
@@ -60,7 +63,7 @@ class ReportPortalManager:
         :return:
             dict: Objeto pronto para ser enviado ao seridor.
         """
-
+        return
         with open(path, 'rb') as file:
             attachment = {
                 "name": basename(path) if not name else name,
@@ -89,6 +92,7 @@ class ReportPortalManager:
         self.endpoint = endpoint
         self.project = project
         self.token = token
+        return
         try:
             self.service = ReportPortalServiceAsync(
                 endpoint=self.endpoint,
@@ -103,6 +107,7 @@ class ReportPortalManager:
         """
         Inicializa um novo serviço para a bateria de testes no Report Portal.
         """
+        return
         try:
             self.service.start_launch(name=self.launch_name,
                                       start_time=self.timestamp(),
@@ -119,6 +124,7 @@ class ReportPortalManager:
         :param feature:
             Objeto da feature utilizada no teste.
         """
+        return
         try:
             self.service.start_test_item(name=feature.name,
                                          description=f'{feature.description}',
@@ -137,6 +143,7 @@ class ReportPortalManager:
         :param scenario:
             Objeto scenario utilizado no teste
         """
+        return
         try:
             self.service.start_test_item(name=scenario.name,
                                          description=f'{scenario.description}',
@@ -154,6 +161,7 @@ class ReportPortalManager:
         :param attachment:
             dict/str: anexo a ser enviado ao servidor.
         """
+        return
         try:
             self.service.log(time=self.timestamp(),
                              message=f"{step.name}[:{step.line}] - Has started...",
@@ -174,6 +182,7 @@ class ReportPortalManager:
         :param attachment:
             dict/str: anexo a ser enviado ao servidor.
         """
+        return
         try:
             status = step.status if type(
                 step.status) == str else step.status.name
@@ -214,6 +223,7 @@ class ReportPortalManager:
         :param scenario:
             Objeto scenario utilizado no teste
         """
+        return
         try:
             status = scenario.status if type(
                 scenario.status) == str else scenario.status.name
@@ -228,6 +238,7 @@ class ReportPortalManager:
         :param feature:
             Objeto da feature utilizada no teste.
         """
+        return
         try:
             status = feature.status if type(
                 feature.status) == str else feature.status.name
@@ -241,6 +252,7 @@ class ReportPortalManager:
         Finaliza o serviço, fecha a conexão com o servidor e conclui a
         bateria de testes.
         """
+        return
         try:
             self.service.finish_launch(end_time=self.timestamp())
             self.service.terminate()
