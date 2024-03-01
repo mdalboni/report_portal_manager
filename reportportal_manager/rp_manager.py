@@ -184,9 +184,8 @@ class ReportPortalManager:
         """
         return
         try:
-            status = step.status if type(
-                step.status) == str else step.status.name
-            if status == 'failed':
+            if (status := step.status if type(
+                step.status) == str else step.status.name) == 'failed':
                 message = (
                         f'{step.name}[:{step.line}] - Has failed...\n' +
                         self.format_traceback(step.exc_traceback)
